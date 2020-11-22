@@ -1,6 +1,5 @@
 package com.example.eight.fragment;
 
-import android.content.Intent;
 import android.content.Context;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -14,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-import com.example.eight.MainActivity;
+
 import com.example.eight.R;
 
 public class LaunchFragment extends Fragment {
@@ -66,9 +65,7 @@ public class LaunchFragment extends Fragment {
             btn_start.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    Intent intent = new Intent(mContext, MainActivity.class);
-                    startActivity(intent);
+                    Toast.makeText(mContext, "即将进入商品列表", Toast.LENGTH_SHORT).show();
                 }
             });
         }

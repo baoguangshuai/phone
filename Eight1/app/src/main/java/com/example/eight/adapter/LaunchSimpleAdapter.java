@@ -1,12 +1,12 @@
 package com.example.eight.adapter;
 
 import androidx.viewpager.widget.PagerAdapter;
-import com.example.eight.MainActivity;
-import java.util.ArrayList;
-import android.content.Context;
-import com.example.eight.R;
-import android.content.Intent;
 
+import java.util.ArrayList;
+
+import com.example.eight.R;
+
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -51,8 +51,8 @@ public class LaunchSimpleAdapter extends PagerAdapter {
                 btn_start.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(mContext, MainActivity.class);
-                        mContext.startActivity(intent);
+                        Toast.makeText(mContext, "欢迎您开启美好生活",
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
             }
