@@ -1,33 +1,33 @@
-package com.example.eight;
+package com.example.homeworkend;
+
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-        import android.content.Intent;
-        import android.graphics.Bitmap;
-        import android.graphics.BitmapFactory;
-        import android.graphics.Color;
-        import android.os.Bundle;
-        import android.os.Environment;
-        import android.util.Log;
-        import android.util.TypedValue;
-        import android.view.Gravity;
-        import android.view.View;
-        import android.widget.Button;
-        import android.widget.ImageView;
-        import android.widget.LinearLayout;
-        import android.widget.TextView;
-        import android.widget.Toast;
+import com.example.homeworkend.bean.CartInfo;
+import com.example.homeworkend.bean.GoodInfo;
+import com.example.homeworkend.database.CartDBHelper;
+import com.example.homeworkend.database.GoodsDBHelper;
+import com.example.homeworkend.util.DateUtil;
+import com.example.homeworkend.util.FileUtil;
+import com.example.homeworkend.util.SharedUtil;
+import com.example.homeworkend.util.Utils;
 
-        import com.example.eight.bean.CartInfo;
-        import com.example.eight.bean.GoodsInfo;
-        import com.example.eight.database.CartDBHelper;
-        import com.example.eight.database.GoodsDBHelper;
-        import com.example.eight.util.DateUtil;
-        import com.example.eight.util.FileUtil;
-        import com.example.eight.util.SharedUtil;
-        import com.example.eight.util.Utils;
-
-        import java.util.ArrayList;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "ShoppingChannel";
@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         // 隐藏标题栏
         getSupportActionBar().hide();
 
@@ -49,14 +48,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_count = findViewById(R.id.tv_count);
         ll_channel = findViewById(R.id.ll_channel);
         findViewById(R.id.iv_cart).setOnClickListener(this);
-        tv_title.setText("鲍广帅的商城");
+        tv_title.setText("鲍广帅的商场");
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.iv_cart) { // 点击了购物车图标
             // 跳转到购物车页面
-            Intent intent = new Intent(this, ShoppingCartActivity.class);
+            Intent intent = new Intent(this, ShoppingCartProActivity.class);
             startActivity(intent);
         }
     }
@@ -118,9 +117,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void showGoods() {
         Log.d(TAG, "showGoods");
         // 移除线性布局ll_channel下面的所有子视图
-        ll_channel.removeAllViews();
-        // mFullParams这个布局参数的宽度占了一整行
-        mFullParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         // mHalfParams这个布局参数的宽度与其它布局平均分
         mHalfParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
         // 给mHalfParams设置四周的空白距离
@@ -128,11 +124,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 创建一行的线性布局
         LinearLayout ll_row = newLinearLayout(LinearLayout.HORIZONTAL, 0);
         // 查询商品数据库中的所有商品记录
-        ArrayList<GoodsInfo> goodsArray = mGoodsHelper.query("1=1");
+        ArrayList<GoodInfo> goodsArray = mGoodsHelper.query("1=1");
         Log.d(TAG, "size:" + goodsArray.size());
         int i = 0;
         for (; i < goodsArray.size(); i++) {
-            final GoodsInfo info = goodsArray.get(i);
+            final GoodInfo info = goodsArray.get(i);
             // 创建一个商品项的垂直线性布局，从上到下依次列出商品标题、商品图片、商品价格
             LinearLayout ll_goods = newLinearLayout(LinearLayout.VERTICAL, 1);
             ll_goods.setBackgroundColor(Color.WHITE);
@@ -218,9 +214,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String path = MainApplication.getInstance().getExternalFilesDir(
                 Environment.DIRECTORY_DOWNLOADS).toString() + "/";
         if (mFirst.equals("true")) { // 如果是首次打开
-            ArrayList<GoodsInfo> goodsList = GoodsInfo.getDefaultList();
+            ArrayList<GoodInfo> goodsList = GoodInfo.getDefaultList();
             for (int i = 0; i < goodsList.size(); i++) {
-                GoodsInfo info = goodsList.get(i);
+                GoodInfo info = goodsList.get(i);
                 // 往商品数据库插入一条该商品的记录
                 long rowid = mGoodsHelper.insert(info);
                 info.rowid = rowid;
@@ -241,9 +237,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         } else { // 不是首次打开
             // 查询商品数据库中所有商品记录
-            ArrayList<GoodsInfo> goodsArray = mGoodsHelper.query("1=1");
+            ArrayList<GoodInfo> goodsArray = mGoodsHelper.query("1=1");
             for (int i = 0; i < goodsArray.size(); i++) {
-                GoodsInfo info = goodsArray.get(i);
+                GoodInfo info = goodsArray.get(i);
                 // 从指定路径读取图片文件的位图数据
                 Bitmap thumb = BitmapFactory.decodeFile(info.thumb_path);
                 // 把该位图对象保存到应用实例的全局变量中
